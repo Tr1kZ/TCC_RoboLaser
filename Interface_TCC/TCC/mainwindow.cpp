@@ -74,7 +74,15 @@ void MainWindow::on_convertButton_clicked()
 
             X = QString::number((float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat());
             Y = QString::number((float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat());
-            codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+ui->off_z->text()+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            if(!Z0_flag)
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+ui->off_z->text()+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            else
+            {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+ui->off_z->text()+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[2]");
+                Z0_flag = false;
+            }
+
+
             if(i == codigoG.size()-1)
             {
                 QString linha_antiga = codigoPDL2.last();
@@ -85,9 +93,6 @@ void MainWindow::on_convertButton_clicked()
 
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
-
-
-
         }
         else if(QString::compare(linha.at(0), "Z") == 0 && i != 1)
         {
@@ -99,26 +104,28 @@ void MainWindow::on_convertButton_clicked()
                 //ui->listWidget->addItem("DESLIGA LASER");
                 //codigoPDL2.append("-- $DOUT[17] := FALSE");
                 linha_nova = linha_antiga+" WITH CONDITION[1]";
+                codigoPDL2.removeLast();
+                codigoPDL2.append(linha_nova);
+                codigoPDL2.append(linha_antiga);
+                i++;
+
             }
             else //if(linha.size() == 2)
             {
                 //ui->listWidget->addItem("LIGA LASER");
                 //codigoPDL2.append("-- $DOUT[17] := TRUE");
-                linha_nova = linha_antiga+" WITH CONDITION[2]";
+                //linha_nova = linha_antiga+" WITH CONDITION[2]";
+                i++;
+                Z0_flag = true;
             }
 
-            codigoPDL2.removeLast();
-            codigoPDL2.append(linha_nova);
 
-            if(QString::compare(codigoPDL2.at(codigoPDL2.size()-2).left(70),codigoPDL2.at(codigoPDL2.size()-1).left(70))== 0)
+            //if(QString::compare(codigoPDL2.at(codigoPDL2.size()-2).left(70),codigoPDL2.at(codigoPDL2.size()-1).left(70))== 0)
             {
-                codigoPDL2.removeLast();
-                codigoPDL2.removeLast();
+                //codigoPDL2.removeLast();
+                //codigoPDL2.removeLast();
             }
         }
-
-
-
     }
 
     codigoPDL2.append(codigoPDL2.last());
@@ -176,6 +183,7 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
 
     QTextStream in(&file);
     codigoG.clear();
+    ui->gcode->clear();
     while(!in.atEnd())
     {
         QString line = in.readLine();

@@ -39,15 +39,14 @@ private slots:
     void on_convertButton_clicked();
     void inicia_codigoPDL2();
     void finaliza_codigoPDL2();
-
     void on_saveButton_clicked();
-
     void on_listWidget_currentRowChanged(int currentRow);
 
 private:
     Ui::MainWindow *ui;
     QStringList codigoG, codigoPDL2;
     QString currentFileName;
+    bool Z0_flag;
 };
 
 #endif // MAINWINDOW_H
