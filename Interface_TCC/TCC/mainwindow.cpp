@@ -38,6 +38,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
 void MainWindow::on_selectButton_clicked()
 {
     QString fileNames = QFileDialog::getOpenFileName(this, tr("Abrir arquivo"),"/path/to/file/",tr("Arquivos G-Code(*.tap *.gcode *.jpg)"));
@@ -50,11 +51,49 @@ void MainWindow::on_selectButton_clicked()
     }
 }
 
+void MainWindow::vetoriza_pontos()
+{
+    codigoG.back();
+    for(int i = 0 ; i < codigoG.size() ; i++)
+    {
+        QList <Ponto*> segment;
+        QString linha = codigoG.at(i);
+
+        if(QString::compare(linha.at(0), "X") == 0)
+        {
+            QString X;
+            QString Y;
+            int x_cont = 1;
+            while(QString::compare(linha.at(x_cont), " ") != 0)
+                X.append(linha.at(x_cont++));
+
+            int y_cont = x_cont+2;
+            while(y_cont < linha.size())
+                Y.append(linha.at(y_cont++));
+            float x = (float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat();
+            float y = (float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat();
+
+            PList.append(new Ponto(x,y));
+            //X = QString::number((float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat());
+            //Y = QString::number((float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat());
+        }
+
+        else if(QString::compare(linha.at(0), "Z") == 0 && i != 1)
+        {
+
+        }
+    }
+}
+
+
 void MainWindow::on_convertButton_clicked()
 {
     inicia_codigoPDL2();
+
+    vetoriza_pontos();
     //QString Z_DEF = "500";
     //int linhas_inseridas = 0;
+    /*
     codigoG.back();
     for(int i = 0 ; i < codigoG.size() ; i++)
     {
@@ -127,8 +166,13 @@ void MainWindow::on_convertButton_clicked()
             }
         }
     }
-
     codigoPDL2.append(codigoPDL2.last());
+    */
+    for(int i = 0 ; i < PList.size() ; i++)
+    {
+        codigoPDL2.append("X "+QString::number(PList.at(i)->X()));
+        codigoPDL2.append("Y "+QString::number(PList.at(i)->Y()));
+    }
 
     finaliza_codigoPDL2();
     ui->pdl2code->setPlainText(codigoPDL2.join("\n"));

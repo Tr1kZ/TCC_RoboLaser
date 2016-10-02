@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
+#include "ponto.h";
 
 //offset da mesa usada
 /*
@@ -33,12 +34,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void inicia_codigoPDL2();
+    void finaliza_codigoPDL2();
+    void vetoriza_pontos();
 
 private slots:
     void on_selectButton_clicked();
     void on_convertButton_clicked();
-    void inicia_codigoPDL2();
-    void finaliza_codigoPDL2();
     void on_saveButton_clicked();
     void on_listWidget_currentRowChanged(int currentRow);
 
@@ -46,6 +48,8 @@ private:
     Ui::MainWindow *ui;
     QStringList codigoG, codigoPDL2;
     QString currentFileName;
+
+    QList <QList> Segments;
     bool Z0_flag;
 };
 
