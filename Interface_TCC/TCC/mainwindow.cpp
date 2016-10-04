@@ -38,11 +38,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_selectButton_clicked()
 {
     QString fileNames = QFileDialog::getOpenFileName(this, tr("Abrir arquivo"),"/path/to/file/",tr("Arquivos G-Code(*.tap *.gcode *.jpg)"));
-
     if(fileNames != NULL)
     {
         ui->listWidget->addItem(fileNames);
@@ -54,9 +52,9 @@ void MainWindow::on_selectButton_clicked()
 void MainWindow::vetoriza_pontos()
 {
     codigoG.back();
+    Segments.append(PList);
     for(int i = 0 ; i < codigoG.size() ; i++)
     {
-        QList <Ponto*> segment;
         QString linha = codigoG.at(i);
 
         if(QString::compare(linha.at(0), "X") == 0)
@@ -70,12 +68,21 @@ void MainWindow::vetoriza_pontos()
             int y_cont = x_cont+2;
             while(y_cont < linha.size())
                 Y.append(linha.at(y_cont++));
+
             float x = (float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat();
             float y = (float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat();
 
-            PList.append(new Ponto(x,y));
-            //X = QString::number((float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat());
-            //Y = QString::number((float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat());
+            if(Segments.last().isEmpty())
+            {
+                Segments.last().append(QPointF(x,y));
+            }
+            else
+            {
+                if(Segments.last().last().x() != x || Segments.last().last().y() !=y)
+                {
+                    Segments.last().append(QPointF(x,y));
+                }
+            }
         }
 
         else if(QString::compare(linha.at(0), "Z") == 0 && i != 1)
@@ -84,7 +91,6 @@ void MainWindow::vetoriza_pontos()
         }
     }
 }
-
 
 void MainWindow::on_convertButton_clicked()
 {
@@ -168,10 +174,13 @@ void MainWindow::on_convertButton_clicked()
     }
     codigoPDL2.append(codigoPDL2.last());
     */
-    for(int i = 0 ; i < PList.size() ; i++)
+
+    for(int i = 0 ; i < Segments.size() ; i++)
     {
-        codigoPDL2.append("X "+QString::number(PList.at(i)->X()));
-        codigoPDL2.append("Y "+QString::number(PList.at(i)->Y()));
+        for(int j = 0 ; j < Segments.at(i).size() ; j++)
+        {
+            codigoPDL2.append("X "+QString::number(Segments.at(i).at(j).x())+"Y "+QString::number(Segments.at(i).at(j).y()));
+        }
     }
 
     finaliza_codigoPDL2();

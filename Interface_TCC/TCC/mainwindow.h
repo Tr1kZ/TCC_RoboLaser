@@ -48,8 +48,8 @@ private:
     Ui::MainWindow *ui;
     QStringList codigoG, codigoPDL2;
     QString currentFileName;
-
-    QList <QList> Segments;
+    QList <QPointF> PList;
+    QList <QList <QPointF>> Segments;
     bool Z0_flag;
 };
 
