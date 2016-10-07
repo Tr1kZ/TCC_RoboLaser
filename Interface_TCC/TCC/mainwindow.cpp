@@ -78,16 +78,24 @@ void MainWindow::vetoriza_pontos()
             }
             else
             {
-                if(Segments.last().last().x() != x || Segments.last().last().y() !=y)
+                if(Segments.last().last().x() != x || Segments.last().last().y() != y)
                 {
-                    Segments.last().append(QPointF(x,y));
+                    if(Z10_flag)
+                    {
+                        Segments.append(PList);
+                    }
+                    Segments.last().append(QPointF(x, y));
                 }
             }
+            Z10_flag = false;
         }
 
         else if(QString::compare(linha.at(0), "Z") == 0 && i != 1)
         {
-
+            if(linha.size() > 2)
+            {
+                Z10_flag = true;
+            }
         }
     }
 }
@@ -95,8 +103,9 @@ void MainWindow::vetoriza_pontos()
 void MainWindow::on_convertButton_clicked()
 {
     inicia_codigoPDL2();
-
+    Segments.clear();
     vetoriza_pontos();
+
     //QString Z_DEF = "500";
     //int linhas_inseridas = 0;
     /*
@@ -179,7 +188,29 @@ void MainWindow::on_convertButton_clicked()
     {
         for(int j = 0 ; j < Segments.at(i).size() ; j++)
         {
-            codigoPDL2.append("X "+QString::number(Segments.at(i).at(j).x())+"Y "+QString::number(Segments.at(i).at(j).y()));
+            QString X = QString::number(Segments.at(i).at(j).x());
+            QString Y = QString::number(Segments.at(i).at(j).y());
+
+            if(j == 0)
+            {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            }
+            else if(j == 1)
+            {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[2]");
+            }
+            else if(j == Segments.at(i).size()-1)
+            {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            }
+            else
+            {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            }
+            //codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+            //codigoPDL2.append(QString::number(i)+" X "+QString::number(Segments.at(i).at(j).x())+"Y "+QString::number(Segments.at(i).at(j).y()));
         }
     }
 
@@ -217,7 +248,6 @@ void MainWindow::on_saveButton_clicked()
 
     if(file.open(QFile::WriteOnly))
     {
-        //QMessageBox::information(0, "Erro", file.errorString());
         QTextStream out(&file);
 
         out << ui->pdl2code->toPlainText().toUtf8();

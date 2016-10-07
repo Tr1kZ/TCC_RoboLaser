@@ -50,7 +50,7 @@ private:
     QString currentFileName;
     QList <QPointF> PList;
     QList <QList <QPointF>> Segments;
-    bool Z0_flag;
+    bool Z10_flag = false;
 };
 
 #endif // MAINWINDOW_H
