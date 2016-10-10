@@ -69,8 +69,8 @@ void MainWindow::vetoriza_pontos()
             while(y_cont < linha.size())
                 Y.append(linha.at(y_cont++));
 
-            float x = (float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat();
-            float y = (float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat();
+            float x = (float)X.toFloat();
+            float y = (float)Y.toFloat();
 
             if(Segments.last().isEmpty())
             {
@@ -110,8 +110,8 @@ void MainWindow::on_convertButton_clicked()
     {
         for(int j = 0 ; j < Segments.at(i).size() ; j++)
         {
-            QString X = QString::number(Segments.at(i).at(j).x());
-            QString Y = QString::number(Segments.at(i).at(j).y());
+            QString X = QString::number(Segments.at(i).at(j).x()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat());
+            QString Y = QString::number(Segments.at(i).at(j).y()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat());
 
             if(j == 0)
             {
@@ -205,5 +205,23 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
 
 void MainWindow::on_plotButton_clicked()
 {
+    // generate some data:
+    QVector<double> x(101), y(101); // initialize with entries 0..100
+    for (int i=0; i<101; ++i)
+    {
+      x[i] = i/50.0 - 1; // x goes from -1 to 1
+      y[i] = x[i]*x[i]; // let's plot a quadratic function
+    }
+    // create graph and assign data to it:
+    ui->graph->addGraph();
+    ui->graph->graph(0)->setData(x, y);
+    // give the axes some labels:
+    ui->graph->xAxis->setLabel("x");
+    ui->graph->yAxis->setLabel("y");
+    // set axes ranges, so we see all data:
+    ui->graph->xAxis->setRange(-1, 1);
+    ui->graph->yAxis->setRange(0, 1);
+    ui->graph->replot();
+
 
 }
