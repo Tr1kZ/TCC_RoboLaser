@@ -129,7 +129,6 @@ void MainWindow::on_convertButton_clicked()
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
         }
-
     }
 
     finaliza_codigoPDL2();
@@ -205,23 +204,30 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
 
 void MainWindow::on_plotButton_clicked()
 {
-    // generate some data:
-    QVector<double> x(101), y(101); // initialize with entries 0..100
-    for (int i=0; i<101; ++i)
+    for(int i = 0 ; i < Segments.size() ; i++)
     {
-      x[i] = i/50.0 - 1; // x goes from -1 to 1
-      y[i] = x[i]*x[i]; // let's plot a quadratic function
+        if(i==0)
+        {
+            QVector<double> x(Segments.at(i).size()), y(Segments.at(i).size());
+            double max_x = 0, min_x = 0, max_y = 0, min_y = 0;
+            for(int j = 0 ; j < Segments.at(i).size() ; j++)
+            {
+                x[j] = Segments.at(i).at(j).x();
+                y[j] = Segments.at(i).at(j).y();
+                max_x = qMax(max_x, x[j]);
+                min_x = qMin(min_x, x[j]);
+                max_y = qMax(max_y, y[j]);
+                min_y = qMin(min_y, y[j]);
+
+                ui->listWidget->addItem(""+QString::number(max_x));
+            }
+            ui->graph->addGraph();
+            ui->graph->graph(0)->setData(x, y);
+            ui->graph->xAxis->setLabel("x");
+            ui->graph->yAxis->setLabel("y");
+            ui->graph->xAxis->setRange(min_x, max_x);
+            ui->graph->yAxis->setRange(min_y, max_y);
+            ui->graph->replot();
+        }
     }
-    // create graph and assign data to it:
-    ui->graph->addGraph();
-    ui->graph->graph(0)->setData(x, y);
-    // give the axes some labels:
-    ui->graph->xAxis->setLabel("x");
-    ui->graph->yAxis->setLabel("y");
-    // set axes ranges, so we see all data:
-    ui->graph->xAxis->setRange(-1, 1);
-    ui->graph->yAxis->setRange(0, 1);
-    ui->graph->replot();
-
-
 }
