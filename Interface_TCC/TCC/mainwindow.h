@@ -5,7 +5,6 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
-#include "ponto.h";
 
 //offset da mesa usada
 /*

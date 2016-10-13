@@ -49,12 +49,15 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QPushButton *selectButton;
     QPushButton *convertButton;
+    QPushButton *plotButton;
     QPushButton *saveButton;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_3;
     QListWidget *listWidget;
+    QWidget *graph;
     QWidget *layoutWidget2;
+    QVBoxLayout *verticalLayout_13;
     QVBoxLayout *verticalLayout_11;
     QLabel *label_8;
     QHBoxLayout *horizontalLayout_5;
@@ -79,13 +82,18 @@ public:
     QLabel *label_18;
     QLabel *label_20;
     QLabel *label_19;
-    QWidget *layoutWidget3;
+    QVBoxLayout *verticalLayout_12;
     QVBoxLayout *verticalLayout_6;
     QLabel *label_5;
     QHBoxLayout *horizontalLayout_4;
     QLineEdit *increase_scale;
     QLabel *label_6;
     QLineEdit *decrease_scale;
+    QVBoxLayout *verticalLayout_8;
+    QLabel *label_7;
+    QHBoxLayout *horizontalLayout_6;
+    QLineEdit *dist_approach;
+    QLabel *label_21;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -95,9 +103,8 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setEnabled(true);
-        MainWindow->resize(822, 522);
+        MainWindow->resize(1008, 639);
         MainWindow->setMinimumSize(QSize(822, 522));
-        MainWindow->setMaximumSize(QSize(822, 522));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
@@ -183,6 +190,11 @@ public:
 
         horizontalLayout_2->addWidget(convertButton);
 
+        plotButton = new QPushButton(layoutWidget);
+        plotButton->setObjectName(QStringLiteral("plotButton"));
+
+        horizontalLayout_2->addWidget(plotButton);
+
         saveButton = new QPushButton(layoutWidget);
         saveButton->setObjectName(QStringLiteral("saveButton"));
 
@@ -213,14 +225,20 @@ public:
 
         verticalLayout_4->addWidget(listWidget);
 
+        graph = new QWidget(centralWidget);
+        graph->setObjectName(QStringLiteral("graph"));
+        graph->setGeometry(QRect(520, 300, 271, 181));
         layoutWidget2 = new QWidget(centralWidget);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(300, 270, 154, 175));
-        verticalLayout_11 = new QVBoxLayout(layoutWidget2);
+        layoutWidget2->setGeometry(QRect(300, 290, 181, 277));
+        verticalLayout_13 = new QVBoxLayout(layoutWidget2);
+        verticalLayout_13->setSpacing(6);
+        verticalLayout_13->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_13->setObjectName(QStringLiteral("verticalLayout_13"));
+        verticalLayout_13->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_11 = new QVBoxLayout();
         verticalLayout_11->setSpacing(6);
-        verticalLayout_11->setContentsMargins(11, 11, 11, 11);
         verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
-        verticalLayout_11->setContentsMargins(0, 0, 0, 0);
         label_8 = new QLabel(layoutWidget2);
         label_8->setObjectName(QStringLiteral("label_8"));
         label_8->setAlignment(Qt::AlignCenter);
@@ -341,15 +359,16 @@ public:
 
         verticalLayout_11->addLayout(horizontalLayout_5);
 
-        layoutWidget3 = new QWidget(centralWidget);
-        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(510, 301, 151, 43));
-        verticalLayout_6 = new QVBoxLayout(layoutWidget3);
+
+        verticalLayout_13->addLayout(verticalLayout_11);
+
+        verticalLayout_12 = new QVBoxLayout();
+        verticalLayout_12->setSpacing(6);
+        verticalLayout_12->setObjectName(QStringLiteral("verticalLayout_12"));
+        verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setSpacing(6);
-        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        verticalLayout_6->setContentsMargins(0, 0, 0, 0);
-        label_5 = new QLabel(layoutWidget3);
+        label_5 = new QLabel(layoutWidget2);
         label_5->setObjectName(QStringLiteral("label_5"));
         label_5->setAlignment(Qt::AlignCenter);
 
@@ -358,17 +377,17 @@ public:
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        increase_scale = new QLineEdit(layoutWidget3);
+        increase_scale = new QLineEdit(layoutWidget2);
         increase_scale->setObjectName(QStringLiteral("increase_scale"));
 
         horizontalLayout_4->addWidget(increase_scale);
 
-        label_6 = new QLabel(layoutWidget3);
+        label_6 = new QLabel(layoutWidget2);
         label_6->setObjectName(QStringLiteral("label_6"));
 
         horizontalLayout_4->addWidget(label_6);
 
-        decrease_scale = new QLineEdit(layoutWidget3);
+        decrease_scale = new QLineEdit(layoutWidget2);
         decrease_scale->setObjectName(QStringLiteral("decrease_scale"));
 
         horizontalLayout_4->addWidget(decrease_scale);
@@ -376,10 +395,44 @@ public:
 
         verticalLayout_6->addLayout(horizontalLayout_4);
 
+
+        verticalLayout_12->addLayout(verticalLayout_6);
+
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        label_7 = new QLabel(layoutWidget2);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_8->addWidget(label_7);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        dist_approach = new QLineEdit(layoutWidget2);
+        dist_approach->setObjectName(QStringLiteral("dist_approach"));
+
+        horizontalLayout_6->addWidget(dist_approach);
+
+        label_21 = new QLabel(layoutWidget2);
+        label_21->setObjectName(QStringLiteral("label_21"));
+
+        horizontalLayout_6->addWidget(label_21);
+
+
+        verticalLayout_8->addLayout(horizontalLayout_6);
+
+
+        verticalLayout_12->addLayout(verticalLayout_8);
+
+
+        verticalLayout_13->addLayout(verticalLayout_12);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 822, 21));
+        menuBar->setGeometry(QRect(0, 0, 1008, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -402,6 +455,7 @@ public:
         n_program->setText(QApplication::translate("MainWindow", "desenho_laser", 0));
         selectButton->setText(QApplication::translate("MainWindow", "Selecionar arquivo", 0));
         convertButton->setText(QApplication::translate("MainWindow", "Converter", 0));
+        plotButton->setText(QApplication::translate("MainWindow", "Plotar Desenho", 0));
         saveButton->setText(QApplication::translate("MainWindow", "Salvar", 0));
         label_3->setText(QApplication::translate("MainWindow", "Arquivos abertos", 0));
         label_8->setText(QApplication::translate("MainWindow", "Offset da mesa de trabalho", 0));
@@ -419,6 +473,8 @@ public:
         label_19->setText(QApplication::translate("MainWindow", "[\302\260 ]", 0));
         label_5->setText(QApplication::translate("MainWindow", "Escala", 0));
         label_6->setText(QApplication::translate("MainWindow", ":", 0));
+        label_7->setText(QApplication::translate("MainWindow", "Dist\303\242ncia de afastamento", 0));
+        label_21->setText(QApplication::translate("MainWindow", "[mm]", 0));
     } // retranslateUi
 
 };
