@@ -286,4 +286,7 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     ui->n_program->setText(file_name);
     file.close();
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 9e0a379... Build Final - Redundancia de 1 pt
