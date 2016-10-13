@@ -26,6 +26,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "qcustomplot\qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -55,7 +56,7 @@ public:
     QVBoxLayout *verticalLayout_4;
     QLabel *label_3;
     QListWidget *listWidget;
-    QWidget *graph;
+    QCustomPlot *graph;
     QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_13;
     QVBoxLayout *verticalLayout_11;
@@ -94,6 +95,7 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QLineEdit *dist_approach;
     QLabel *label_21;
+    QWidget *widget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -225,7 +227,7 @@ public:
 
         verticalLayout_4->addWidget(listWidget);
 
-        graph = new QWidget(centralWidget);
+        graph = new QCustomPlot(centralWidget);
         graph->setObjectName(QStringLiteral("graph"));
         graph->setGeometry(QRect(520, 300, 271, 181));
         layoutWidget2 = new QWidget(centralWidget);
@@ -429,6 +431,9 @@ public:
 
         verticalLayout_13->addLayout(verticalLayout_12);
 
+        widget = new QWidget(centralWidget);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(430, 260, 120, 80));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));

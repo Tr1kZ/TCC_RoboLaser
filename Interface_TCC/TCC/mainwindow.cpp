@@ -106,84 +106,6 @@ void MainWindow::on_convertButton_clicked()
     Segments.clear();
     vetoriza_pontos();
 
-    //QString Z_DEF = "500";
-    //int linhas_inseridas = 0;
-    /*
-    codigoG.back();
-    for(int i = 0 ; i < codigoG.size() ; i++)
-    {
-        QString linha = codigoG.at(i);
-
-        if(QString::compare(linha.at(0), "X") == 0)
-        {
-            QString X;
-            QString Y;
-            int x_cont = 1;
-            while(QString::compare(linha.at(x_cont), " ") != 0)
-                X.append(linha.at(x_cont++));
-
-            int y_cont = x_cont+2;
-            while(y_cont < linha.size())
-                Y.append(linha.at(y_cont++));
-
-            X = QString::number((float)X.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_x->text().toFloat());
-            Y = QString::number((float)Y.toFloat()*ui->increase_scale->text().toFloat()/ui->decrease_scale->text().toFloat()+ui->off_y->text().toFloat());
-            if(!Z0_flag)
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+ui->off_z->text()+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
-            else
-            {
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+ui->off_z->text()+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[2]");
-                Z0_flag = false;
-            }
-
-
-            if(i == codigoG.size()-1)
-            {
-                QString linha_antiga = codigoPDL2.last();
-                QString linha_nova;
-                linha_nova = linha_antiga+" WITH CONDITION[1]";
-                codigoPDL2.removeLast();
-                codigoPDL2.append(linha_nova);
-
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
-            }
-        }
-        else if(QString::compare(linha.at(0), "Z") == 0 && i != 1)
-        {
-            QString linha_antiga = codigoPDL2.last();
-            QString linha_nova;
-            if(linha.size() == 3)
-            {
-                //codigoPDL2.
-                //ui->listWidget->addItem("DESLIGA LASER");
-                //codigoPDL2.append("-- $DOUT[17] := FALSE");
-                linha_nova = linha_antiga+" WITH CONDITION[1]";
-                codigoPDL2.removeLast();
-                codigoPDL2.append(linha_nova);
-                codigoPDL2.append(linha_antiga);
-                i++;
-
-            }
-            else //if(linha.size() == 2)
-            {
-                //ui->listWidget->addItem("LIGA LASER");
-                //codigoPDL2.append("-- $DOUT[17] := TRUE");
-                //linha_nova = linha_antiga+" WITH CONDITION[2]";
-                i++;
-                Z0_flag = true;
-            }
-
-
-            //if(QString::compare(codigoPDL2.at(codigoPDL2.size()-2).left(70),codigoPDL2.at(codigoPDL2.size()-1).left(70))== 0)
-            {
-                //codigoPDL2.removeLast();
-                //codigoPDL2.removeLast();
-            }
-        }
-    }
-    codigoPDL2.append(codigoPDL2.last());
-    */
-
     for(int i = 0 ; i < Segments.size() ; i++)
     {
         for(int j = 0 ; j < Segments.at(i).size() ; j++)
@@ -196,21 +118,16 @@ void MainWindow::on_convertButton_clicked()
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
-            else if(j == 1)
-            {
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[2]");
-            }
             else if(j == Segments.at(i).size()-1)
             {
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
             else
             {
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
-            //codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
-            //codigoPDL2.append(QString::number(i)+" X "+QString::number(Segments.at(i).at(j).x())+"Y "+QString::number(Segments.at(i).at(j).y()));
         }
     }
 
@@ -228,12 +145,10 @@ void MainWindow::inicia_codigoPDL2()
     codigoPDL2.append("$STRESS_PER := 100"); //Comando para passar em cima dos pontos enquanto realiza o FLY
     codigoPDL2.append("$FDOUT[21] := FALSE");
     codigoPDL2.append("CONDITION[1] :");
+    codigoPDL2.append("WHEN AT START DO");
+    codigoPDL2.append("$FDOUT[21] := TRUE");
     codigoPDL2.append("WHEN AT END DO");
     codigoPDL2.append("$FDOUT[21] := FALSE");
-    codigoPDL2.append("ENDCONDITION");
-    codigoPDL2.append("CONDITION[2] :");
-    codigoPDL2.append("WHEN AT END DO");
-    codigoPDL2.append("$FDOUT[21] := TRUE");
     codigoPDL2.append("ENDCONDITION");
 }
 void MainWindow::finaliza_codigoPDL2()
@@ -286,7 +201,66 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     ui->n_program->setText(file_name);
     file.close();
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 9e0a379... Build Final - Redundancia de 1 pt
+void MainWindow::on_plotButton_clicked()
+{
+    /*
+    double max_x = 0, min_x = 0, max_y = 0, min_y = 0;
+    for(int i = 0 ; i < Segments.size() ; i++)
+    {
+
+        QVector<double> x(Segments.at(i).size()), y(Segments.at(i).size());
+
+        for(int j = 0 ; j < Segments.at(i).size() ; j++)
+        {
+            x[j] = Segments.at(i).at(j).x();
+            y[j] = Segments.at(i).at(j).y();
+            max_x = qMax(max_x, x[j]);
+            min_x = qMin(min_x, x[j]);
+            max_y = qMax(max_y, y[j]);
+            min_y = qMin(min_y, y[j]);
+
+            ui->listWidget->addItem("X "+QString::number(x[j])+ "Y"+QString::number(y[j]));
+        }
+        ui->graph->addGraph();
+        ui->graph->graph(i)->setData(x, y);
+        ui->graph->xAxis->setLabel("x");
+        ui->graph->yAxis->setLabel("y");
+        ui->graph->xAxis->setRange(min_x, max_x);
+        ui->graph->yAxis->setRange(min_y, max_y);
+        ui->graph->replot();
+
+    }
+    */
+
+
+    double max_x = 10, min_x = 0, max_y = 10, min_y = 0;
+
+    {
+
+        QVector<double> x(5), y(5);
+
+        x[0] = 1;
+        y[0] = 1;
+        x[1] = 4;
+        y[1] = 8;
+        x[2] = 8;
+        y[2] = 1;
+        x[3] = 1;
+        y[3] = 1;
+
+        /*
+        ui->graph->addGraph();
+        ui->graph->graph(0)->setData(x, y);
+        ui->graph->xAxis->setLabel("x");
+        ui->graph->yAxis->setLabel("y");
+        ui->graph->xAxis->setRange(min_x, max_x);
+        ui->graph->yAxis->setRange(min_y, max_y);
+        ui->graph->replot();
+        */
+
+    }
+
+    //ui->widget->dr
+
+}

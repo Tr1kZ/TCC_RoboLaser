@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
+#include "ponto.h"
 
 //offset da mesa usada
 /*
@@ -42,6 +43,8 @@ private slots:
     void on_convertButton_clicked();
     void on_saveButton_clicked();
     void on_listWidget_currentRowChanged(int currentRow);
+
+    void on_plotButton_clicked();
 
 private:
     Ui::MainWindow *ui;
