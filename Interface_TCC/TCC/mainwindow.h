@@ -44,8 +44,6 @@ private slots:
     void on_saveButton_clicked();
     void on_listWidget_currentRowChanged(int currentRow);
 
-    void on_plotButton_clicked();
-
 private:
     Ui::MainWindow *ui;
     QStringList codigoG, codigoPDL2;
