@@ -287,6 +287,7 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     file.close();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 void MainWindow::on_plotButton_clicked()
 {
@@ -317,5 +318,7 @@ void MainWindow::on_plotButton_clicked()
         }
     }
 }
+=======
+>>>>>>> parent of 9e0a379... Build Final - Redundancia de 1 pt
 =======
 >>>>>>> parent of 9e0a379... Build Final - Redundancia de 1 pt
