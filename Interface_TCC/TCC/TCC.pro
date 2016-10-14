@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = TCC
 TEMPLATE = app
@@ -14,11 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    ponto.cpp \
-    qcustomplot/qcustomplot.cpp
+    drawer.cpp
 
 HEADERS  += mainwindow.h \
-    ponto.h \
-    qcustomplot/qcustomplot.h
+    drawer.h
 
 FORMS    += mainwindow.ui

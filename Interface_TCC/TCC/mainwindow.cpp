@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->dist_approach->setValidator(new QDoubleValidator(0, 100, 6, this));
     ui->dist_approach->setText("10");
+
+    draw =  ui->widget_plot;
 }
 
 MainWindow::~MainWindow()
@@ -103,8 +105,7 @@ void MainWindow::vetoriza_pontos()
 void MainWindow::on_convertButton_clicked()
 {
     inicia_codigoPDL2();
-    Segments.clear();
-    vetoriza_pontos();
+
 
     for(int i = 0 ; i < Segments.size() ; i++)
     {
@@ -117,9 +118,14 @@ void MainWindow::on_convertButton_clicked()
             {
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+
+                codigoPDL2.append(codigoPDL2.last());
+                //codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
             else if(j == Segments.at(i).size()-1)
             {
+
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
@@ -129,6 +135,7 @@ void MainWindow::on_convertButton_clicked()
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
         }
+
     }
 
     finaliza_codigoPDL2();
@@ -200,67 +207,11 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
 
     ui->n_program->setText(file_name);
     file.close();
-}
 
-void MainWindow::on_plotButton_clicked()
-{
-    /*
-    double max_x = 0, min_x = 0, max_y = 0, min_y = 0;
-    for(int i = 0 ; i < Segments.size() ; i++)
-    {
+    Segments.clear();
+    vetoriza_pontos();
 
-        QVector<double> x(Segments.at(i).size()), y(Segments.at(i).size());
+    draw->setSegs(Segments);
 
-        for(int j = 0 ; j < Segments.at(i).size() ; j++)
-        {
-            x[j] = Segments.at(i).at(j).x();
-            y[j] = Segments.at(i).at(j).y();
-            max_x = qMax(max_x, x[j]);
-            min_x = qMin(min_x, x[j]);
-            max_y = qMax(max_y, y[j]);
-            min_y = qMin(min_y, y[j]);
-
-            ui->listWidget->addItem("X "+QString::number(x[j])+ "Y"+QString::number(y[j]));
-        }
-        ui->graph->addGraph();
-        ui->graph->graph(i)->setData(x, y);
-        ui->graph->xAxis->setLabel("x");
-        ui->graph->yAxis->setLabel("y");
-        ui->graph->xAxis->setRange(min_x, max_x);
-        ui->graph->yAxis->setRange(min_y, max_y);
-        ui->graph->replot();
-
-    }
-    */
-
-
-    double max_x = 10, min_x = 0, max_y = 10, min_y = 0;
-
-    {
-
-        QVector<double> x(5), y(5);
-
-        x[0] = 1;
-        y[0] = 1;
-        x[1] = 4;
-        y[1] = 8;
-        x[2] = 8;
-        y[2] = 1;
-        x[3] = 1;
-        y[3] = 1;
-
-        /*
-        ui->graph->addGraph();
-        ui->graph->graph(0)->setData(x, y);
-        ui->graph->xAxis->setLabel("x");
-        ui->graph->yAxis->setLabel("y");
-        ui->graph->xAxis->setRange(min_x, max_x);
-        ui->graph->yAxis->setRange(min_y, max_y);
-        ui->graph->replot();
-        */
-
-    }
-
-    //ui->widget->dr
-
+    draw->update();
 }
