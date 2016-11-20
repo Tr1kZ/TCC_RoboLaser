@@ -23,13 +23,29 @@
 #define OFF_A 166.194
 #define OFF_E 50.315
 #define OFF_R -67.041
-*/
+
 #define OFF_X -101.023
 #define OFF_Y 327.590
 #define OFF_Z 180.484
 #define OFF_A 108.854
 #define OFF_E 1.678
 #define OFF_R -2.125
+
+
+
+#define OFF_X 143.342
+#define OFF_Y 198.435
+#define OFF_Z 86.082
+#define OFF_A 171.572
+#define OFF_E 179.632
+#define OFF_R 174.496
+*/
+#define OFF_X 191.920
+#define OFF_Y 57.708
+#define OFF_Z 79.6
+#define OFF_A 177.325
+#define OFF_E 179.177
+#define OFF_R 179.135
 
 namespace Ui {
 class MainWindow;

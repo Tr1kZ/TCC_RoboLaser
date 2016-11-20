@@ -8,12 +8,9 @@ Drawer::Drawer(QWidget *parent) : QWidget(parent)
 void Drawer::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
-    //painter.setBackground();
-    painter.fillRect(QRectF(0,0,width(),height()),QBrush(QColor(200,200,200),Qt::CrossPattern));
+    painter.fillRect(QRectF(0, 0, width(), height()), QBrush(QColor(200, 200, 200), Qt::CrossPattern));
     if(!Segments.isEmpty())
     {
-
         painter.setTransform(QTransform(1,0,0,0,-1,0,0,0,1), false);
 
         double max_x = Segments.at(0).at(0).x(), min_x = Segments.at(0).at(0).x(), max_y = Segments.at(0).at(0).y(), min_y = Segments.at(0).at(0).y();
@@ -28,8 +25,8 @@ void Drawer::paintEvent(QPaintEvent *event)
             }
         }
 
-        float sc_h = (float)(width()-2)/(max_x-min_x); // Checar escalas negativas
-        float sc_v = (float)(height()-2)/(max_y-min_y);
+        float sc_h = (float)(width()-2)/(max_x-min_x); //-2 para tirar um pixel de um lado e do outro
+        float sc_v = (float)(height()-2)/(max_y-min_y); //ou uma acima e um abaixo
         float sc_f = qMin(sc_v,sc_h);
 
         painter.translate(1-min_x*sc_f,1-min_y*sc_f-height());

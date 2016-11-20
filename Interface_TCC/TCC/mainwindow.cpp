@@ -12,8 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->increase_scale->setText("1");
     ui->decrease_scale->setValidator(new QDoubleValidator(0, 100, 6, this));
     ui->decrease_scale->setText("1");
-    ui->increase_scale->setValidator(new QDoubleValidator(0, 100, 6, this));
-    ui->increase_scale->setText("1");
 
     ui->off_x->setValidator(new QDoubleValidator(0, 100, 6, this));
     ui->off_x->setText(QString::number(OFF_X));
@@ -30,7 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->off_r->setText(QString::number(OFF_R));
 
     ui->dist_approach->setValidator(new QDoubleValidator(0, 100, 6, this));
-    ui->dist_approach->setText("10");
+    ui->dist_approach->setText("0");
+    ui->speed_over->setValidator(new QDoubleValidator(0, 100, 6, this));
+    ui->speed_over->setText("5");
 
     draw =  ui->widget_plot;
 }
@@ -106,7 +106,6 @@ void MainWindow::on_convertButton_clicked()
 {
     inicia_codigoPDL2();
 
-
     for(int i = 0 ; i < Segments.size() ; i++)
     {
         for(int j = 0 ; j < Segments.at(i).size() ; j++)
@@ -118,29 +117,27 @@ void MainWindow::on_convertButton_clicked()
             {
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
-
-                codigoPDL2.append(codigoPDL2.last());
-                //codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
             }
             else if(j == Segments.at(i).size()-1)
             {
-
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[2]");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat()+ui->dist_approach->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
             else
             {
-                codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE WITH CONDITION[1]");
                 codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
+                if(ui->check_redund->isChecked())
+                    codigoPDL2.append("MOVEFLY LINEAR TO POS("+X+", "+Y+", "+QString::number(ui->off_z->text().toFloat())+", "+ui->off_a->text()+", "+ui->off_e->text()+", "+ui->off_r->text()+", '') ADVANCE");
             }
         }
-
     }
 
     finaliza_codigoPDL2();
     ui->pdl2code->setPlainText(codigoPDL2.join("\n"));
 }
+
 void MainWindow::inicia_codigoPDL2()
 {
     codigoPDL2.clear();
@@ -150,16 +147,21 @@ void MainWindow::inicia_codigoPDL2()
     codigoPDL2.append("$SPD_OPT := SPD_LIN"); //Comando para usar o FLY_CART
     codigoPDL2.append("$FLY_TYPE := FLY_CART"); //Comando para manter a velocidade constante
     codigoPDL2.append("$STRESS_PER := 100"); //Comando para passar em cima dos pontos enquanto realiza o FLY
-    codigoPDL2.append("$FDOUT[21] := FALSE");
+    codigoPDL2.append("$DOUT[1] := FALSE");
     codigoPDL2.append("CONDITION[1] :");
-    codigoPDL2.append("WHEN AT START DO");
-    codigoPDL2.append("$FDOUT[21] := TRUE");
     codigoPDL2.append("WHEN AT END DO");
-    codigoPDL2.append("$FDOUT[21] := FALSE");
+    codigoPDL2.append("$DOUT[1] := TRUE");
     codigoPDL2.append("ENDCONDITION");
+    codigoPDL2.append("CONDITION[2] :");
+    codigoPDL2.append("WHEN AT END DO");
+    codigoPDL2.append("$DOUT[1] := FALSE");
+    codigoPDL2.append("ENDCONDITION");
+    codigoPDL2.append("$ARM_SPD_OVR := "+ui->speed_over->text());
 }
+
 void MainWindow::finaliza_codigoPDL2()
 {
+    codigoPDL2.append("$ARM_SPD_OVR := 100");
     codigoPDL2.append("END "+ui->n_program->text());
 }
 
@@ -196,7 +198,6 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     }
     codigoG.removeLast();
     ui->gcode->appendPlainText(codigoG.join("\n"));
-
     int begin_name = 0;
     for(int i = 0 ; i < currentFileName.size() ; i++)
     {
@@ -212,6 +213,5 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     vetoriza_pontos();
 
     draw->setSegs(Segments);
-
     draw->update();
 }

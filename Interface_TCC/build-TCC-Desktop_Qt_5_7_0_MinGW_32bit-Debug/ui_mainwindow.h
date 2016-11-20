@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -75,6 +76,11 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QLineEdit *dist_approach;
     QLabel *label_21;
+    QLabel *label_22;
+    QHBoxLayout *horizontalLayout_7;
+    QLineEdit *speed_over;
+    QLabel *label_23;
+    QCheckBox *check_redund;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout;
@@ -101,14 +107,14 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setEnabled(true);
-        MainWindow->resize(822, 650);
-        MainWindow->setMinimumSize(QSize(822, 650));
+        MainWindow->resize(822, 700);
+        MainWindow->setMinimumSize(QSize(822, 700));
         MainWindow->setMaximumSize(QSize(822, 650));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(11, 307, 771, 277));
+        layoutWidget->setGeometry(QRect(11, 307, 771, 347));
         horizontalLayout_3 = new QHBoxLayout(layoutWidget);
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -319,6 +325,33 @@ public:
 
         verticalLayout_8->addLayout(horizontalLayout_6);
 
+        label_22 = new QLabel(layoutWidget);
+        label_22->setObjectName(QStringLiteral("label_22"));
+        label_22->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_8->addWidget(label_22);
+
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setSpacing(6);
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        speed_over = new QLineEdit(layoutWidget);
+        speed_over->setObjectName(QStringLiteral("speed_over"));
+
+        horizontalLayout_7->addWidget(speed_over);
+
+        label_23 = new QLabel(layoutWidget);
+        label_23->setObjectName(QStringLiteral("label_23"));
+
+        horizontalLayout_7->addWidget(label_23);
+
+
+        verticalLayout_8->addLayout(horizontalLayout_7);
+
+        check_redund = new QCheckBox(layoutWidget);
+        check_redund->setObjectName(QStringLiteral("check_redund"));
+
+        verticalLayout_8->addWidget(check_redund);
+
 
         verticalLayout_12->addLayout(verticalLayout_8);
 
@@ -458,6 +491,9 @@ public:
         label_6->setText(QApplication::translate("MainWindow", ":", 0));
         label_7->setText(QApplication::translate("MainWindow", "Dist\303\242ncia de afastamento", 0));
         label_21->setText(QApplication::translate("MainWindow", "[mm]", 0));
+        label_22->setText(QApplication::translate("MainWindow", "Sobreposi\303\247\303\243o de velocidade", 0));
+        label_23->setText(QApplication::translate("MainWindow", "[%]", 0));
+        check_redund->setText(QApplication::translate("MainWindow", "Redund\303\242ncia", 0));
         label->setText(QApplication::translate("MainWindow", "C\303\263digo G", 0));
         label_2->setText(QApplication::translate("MainWindow", "C\303\263digo PDL2", 0));
         label_4->setText(QApplication::translate("MainWindow", "Nome do programa:", 0));
